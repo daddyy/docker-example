@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  php:
+    extends:
+      file: ./docker/common-services.yaml
+      service: php
+    build:
+      target: local
+    environment:
+      - HISTFILE=/root/.bash_history
+    volumes:
+      - ./app:/var/www/html
+      - ./docker/php/bash_history:/root/.bash_history
+    env_file:
+      - ./.env.local
+  nginx:
+    extends:
+      file: ./docker/common-services.yaml
+      service: nginx
+    build:
+      target: local
+    env_file:
+      - ./.env.local
+    environment:
+      - HISTFILE=/root/.bash_history
+    volumes:
+      - ./app/www:/var/www/html/www
+      - ./docker/nginx/bash_history:/root/.bash_history
+networks:
+  docker_app:
+    driver: bridge

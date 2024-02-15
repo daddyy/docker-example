@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  php:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+      args:
+        PHP_PORT: ${PHP_PORT}
+        DIR_LOG: ${DIR_LOG}
+    image: docker_app-php:${VERSION}
+    restart: always
+    networks:
+      - docker_app
+    ports:
+      - ${PHP_PORT}
+  nginx:
+    build:
+      dockerfile: ./nginx/Dockerfile
+    image: docker_app-nginx:${VERSION}
+    networks:
+      - docker_app
+    environment:
+      - PHP_SERVICE=${PHP_SERVICE}
+      - PHP_PORT=${PHP_PORT}
+      - NGINX_PORT=${NGINX_PORT}
+      - NGINX_SERVER_NAME=${NGINX_SERVER_NAME}
+      - DIR_WWW=${DIR_WWW}
+      - NGINX_ACCESS_LOG=${NGINX_ACCESS_LOG}
+      - NGINX_ERROR_LOG=${NGINX_ERROR_LOG}
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}
+    depends_on:
+      - php
