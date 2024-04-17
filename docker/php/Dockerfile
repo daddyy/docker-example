@@ -9,11 +9,15 @@ RUN apk add \
     icu-dev \
     gettext \
     gettext-dev \
+    gcc \
+    make \
+    autoconf \
     && docker-php-ext-install \
     pdo \
     pdo_mysql \
     intl \
     gettext
+RUN pecl channel-update pecl.php.net
 
 COPY ./php/default.conf /etc/php/8.1/fpm/pool.d/default.conf
 COPY ./php/php.ini /etc/php/8.1/fpm/php.ini

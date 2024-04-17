@@ -1,0 +1,43 @@
+# Copyright The OpenTelemetry Authors
+# SPDX-License-Identifier: Apache-2.0
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+        cors:
+          allowed_origins:
+            - "http://*"
+            - "https://*"
+  httpcheck/nginx:
+    targets:
+      - endpoint: http://nginx:${env:NGINX_PORT}
+
+# exporters:
+#   debug:
+#   otlphttp/prometheus:
+#     endpoint: "http://prometheus:9090/api/v1/otlp"
+#     tls:
+#       insecure: true
+
+# processors:
+#   batch:
+
+# connectors:
+#   spanmetrics:
+
+# service:
+#   pipelines:
+#     traces:
+#       receivers: [otlp]
+#       processors: [batch]
+#       exporters: [otlp, debug, spanmetrics]
+#     metrics:
+#       receivers: [httpcheck/frontendproxy, otlp, spanmetrics]
+#       processors: [batch]
+#       exporters: [otlphttp/prometheus, debug]
+#     logs:
+#       receivers: [otlp]
+#       processors: [batch]
+#       exporters: [opensearch, debug]

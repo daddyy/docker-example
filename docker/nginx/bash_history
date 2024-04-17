@@ -1,2 +1,9 @@
 ls -la
 exit
+cat /etc/nginx/nginx.conf 
+ls -la /etc/nginx/modules/
+apk add mlocate
+updatedb 
+locate ngx_otel_module.so
+locate index.php
+exit

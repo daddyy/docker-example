@@ -1,6 +1,9 @@
-version: "3.7"
+version: "3.9"
+
 services:
   php:
+    env_file:
+      - ./.env.local
     extends:
       file: ./docker/common-services.yaml
       service: php
@@ -11,21 +14,31 @@ services:
     volumes:
       - ./app:/var/www/html
       - ./docker/php/bash_history:/root/.bash_history
+  nginx:
     env_file:
       - ./.env.local
-  nginx:
     extends:
       file: ./docker/common-services.yaml
       service: nginx
     build:
       target: local
-    env_file:
-      - ./.env.local
     environment:
       - HISTFILE=/root/.bash_history
     volumes:
       - ./app/www:/var/www/html/www
       - ./docker/nginx/bash_history:/root/.bash_history
+  otelcol:
+    env_file:
+      - ./.env.local
+    extends:
+      file: ./docker/common-services.yaml
+      service: otelcol
+    # command: [ "--config=/etc/otelcol-config-extras.yml" ]
+    volumes:
+      - ./docker/otelcol-config-extras.yml:/etc/otelcol-config-extras.yml
+    ports:
+      - "${OTEL_COLLECTOR_PORT_GRPC}"
+      - "${OTEL_COLLECTOR_PORT_HTTP}"
 networks:
   docker_app:
     driver: bridge

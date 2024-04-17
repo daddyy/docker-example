@@ -1,5 +1,16 @@
 {
     "require": {
-        "tracy/tracy": "^2.10"
+        "tracy/tracy": "^2.10",
+        "monolog/monolog": "^3.6",
+        "open-telemetry/opentelemetry-logger-monolog": "^1.0",
+        "slim/psr7": "^1.6",
+        "slim/slim": "^4.13",
+        "open-telemetry/sdk": "^1.0",
+        "open-telemetry/opentelemetry-auto-slim": "^1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
     }
 }

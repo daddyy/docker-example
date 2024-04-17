@@ -1,4 +1,10 @@
-version: "3.7"
+x-default-logging: &logging
+  driver: "json-file"
+  options:
+    max-size: "5m"
+    max-file: "2"
+    tag: "{{.Name}}"
+
 services:
   php:
     build:
@@ -13,9 +19,11 @@ services:
       - docker_app
     ports:
       - ${PHP_PORT}
+    logging: *logging
   nginx:
     build:
       dockerfile: ./nginx/Dockerfile
+      context: .
     image: docker_app-nginx:${VERSION}
     networks:
       - docker_app
@@ -31,3 +39,9 @@ services:
       - ${NGINX_PORT}:${NGINX_PORT}
     depends_on:
       - php
+    logging: *logging
+  otelcol:
+    build:
+      context: .
+      dockerfile: ./otel/Dockerfile
+    logging: *logging
